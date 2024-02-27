@@ -6,7 +6,7 @@
 /*   By: ykerdel <ykerdel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:21:07 by mobadiah          #+#    #+#             */
-/*   Updated: 2024/02/27 21:07:02 by ykerdel          ###   ########.fr       */
+/*   Updated: 2024/02/27 21:34:24 by ykerdel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 typedef struct s_data
 {
+	char* path[4];
 	int f[3];
 	int c[3];
 } t_data; 
@@ -77,18 +78,37 @@ int get_rgb(t_data *data, char *str)
 	return (-1); /// rgb should
 }
 
+int get_path(char **path, char *str)
+{
+	int it;
+	char *tmp;
+
+	
+	it = 0;
+	while (str[it] && !isspace(str[it]))
+		it++;
+	tmp = str + it;
+	while (str[it] && isspace(str[it]))
+		it++;
+	if (str[it])
+		return (0);
+	*tmp = 0;
+	*path = str;
+	return (1);
+}
 
 
-// int main() {
-//     char input[] = "    32";
-//     int  result;
-// 	t_data data;
+
+int main() {
+    char input[] = "    32";
+    int  result;
+	t_data data;
 	
-//     int ret = get_rgb(&data, "1,2,3");
-// 	dprintf(2, "ret = %d\n", ret);
-// 	printf("r = %d\n", data.f[0]);
-// 	printf("g = %d\n", data.f[1]);
-// 	printf("b = %d\n", data.f[2]);
+    int ret = get_rgb(&data, "1,2,3");
+	dprintf(2, "ret = %d\n", ret);
+	printf("r = %d\n", data.f[0]);
+	printf("g = %d\n", data.f[1]);
+	printf("b = %d\n", data.f[2]);
 	
-//     return 0;
-// }
+    return 0;
+}
