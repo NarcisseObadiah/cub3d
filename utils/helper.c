@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mobadiah <mobadiah@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ykerdel <ykerdel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:21:07 by mobadiah          #+#    #+#             */
-/*   Updated: 2024/02/27 20:26:21 by mobadiah         ###   ########.fr       */
+/*   Updated: 2024/02/27 21:07:02 by ykerdel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+// #include "../include/cub3d.h"
 
+#include <ctype.h> /// goto .h
+#include <string.h>
+#include <stdio.h>
+
+typedef struct s_data
+{
+	int f[3];
+	int c[3];
+} t_data; 
 
 int string_to_int(char* str, int* output) {
     int i;
@@ -43,21 +52,43 @@ int string_to_int(char* str, int* output) {
     return (i + j);
 }
 
+int get_rgb(t_data *data, char *str)
+{
+	int		i;
+	char	*tmp;
+
+	tmp = str;
+	i = string_to_int(tmp, &data->f[0]);
+	if (!i || *(tmp + i) != ',' || data->f[0] < 0 || data->f[0] > 255)
+		return (tmp - str); /// error
+	tmp += i + 1;
+	i = string_to_int(tmp, &data->f[1]);
+	if (!i || *(tmp + i) != ',' || data->f[1] < 0 || data->f[1] > 255)
+		return (tmp - str); /// error
+	tmp += i + 1;
+	i = string_to_int(tmp, &data->f[2]);
+	if (!i || data->f[2] < 0 || data->f[2] > 255)
+		return (tmp - str); /// error
+	tmp += i;
+	while (*tmp && isspace(*tmp) && *tmp != '\n')
+		tmp++;
+	if (*tmp != '\0' && *tmp != '\n')
+		return (tmp - str); /// error
+	return (-1); /// rgb should
+}
+
 
 
 // int main() {
 //     char input[] = "    32";
 //     int  result;
-//     int ret = string_to_int(input, &result);
-// dprintf(2, "ret = %d\n", ret);
-// 	if (ret == -1) {
-//         printf("No input.\n");
-// 	}
-//     else if (ret != strlen(input)){
-//         printf("Conversion failed.\n");
-//     }
-//     else {
-//         printf("Conversion successful. Result: %d\n", result);
-// 	}
+// 	t_data data;
+	
+//     int ret = get_rgb(&data, "1,2,3");
+// 	dprintf(2, "ret = %d\n", ret);
+// 	printf("r = %d\n", data.f[0]);
+// 	printf("g = %d\n", data.f[1]);
+// 	printf("b = %d\n", data.f[2]);
+	
 //     return 0;
 // }
