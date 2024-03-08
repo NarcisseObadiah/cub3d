@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mobadiah <mobadiah@student.42.fr>          +#+  +:+       +#+        */
+/*   By: narcisse <narcisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:21:07 by mobadiah          #+#    #+#             */
-/*   Updated: 2024/03/05 12:00:56 by mobadiah         ###   ########.fr       */
+/*   Updated: 2024/03/08 00:00:03 by narcisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_map_node *create_node(char *line)
 void add_node(t_map_node **head, char *line)
 {	
 	t_map_node *current_node;
-	t_map_node *new_node ;
+	t_map_node *new_node ; 
 
 	new_node = create_node(line);
 	if (*head == NULL)
@@ -112,7 +112,6 @@ int get_map(t_map_node **map, char *str)
 	if (line_start < ptr)
 		add_node(map, line_start);
 	return (0);
-	
 }
 
 
