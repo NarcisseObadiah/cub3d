@@ -21,7 +21,8 @@ void	ft_error(char *str)
 int	is_valid(char c)
 {
 	return ((c == '0') || (c == '1') || (c == 'N')
-		|| (c == 'S') || (c == 'E') || (c == 'W'));
+		|| (c == 'S') || (c == 'E') || (c == 'W')
+		|| (c == ' ') || (c == '\n'));
 }
 //function to create a node  to save each
 //line of the map in a linked list

@@ -22,7 +22,7 @@ int	string_to_int(char *str, int *output)
 	*output = 0;
 	i = 0;
 	j = 0;
-	while (str[i] && isspace(str[i]))
+	while (str[i] && ft_isspace(str[i])) /// create is space function
 		i++;
 	if (str[i] == '+')
 	{
@@ -34,51 +34,51 @@ int	string_to_int(char *str, int *output)
 		sign = -1;
 		i++;
 	}
-	while (str[i + j] && isdigit(str[i + j]))
+	while (str[i + j] && ft_isdigit(str[i + j]))
 		*output = (*output * 10) + (str[i + j++] - '0');
 	*output *= (sign + (sign == 0));
-	if (!j && i == strlen(str))
+	if (!j && i == ft_strlen(str))
 		return (-1);
 	return (i + j);
 }
 
-// (int **val, char *str) // check      val[10, 1, 0]
-
-int get_rgb(t_data *data, char *str)
+int get_rgb(int (*val)[3], char *str)
 {
 	int		i;
 	char	*tmp;
 	tmp = str;
-	i = string_to_int(tmp, &data->f[0]);
-	if (!i || *(tmp + i) != ',' || data->f[0] < 0 || data->f[0] > 255)
-		return (tmp - str); /// error
+	i = string_to_int(tmp, val[0]);
+	if (!i || *(tmp + i) != ',' || *val[0] < 0 || *val[0] > 255)
+		return (tmp - str);
 	tmp += i + 1;
-	i = string_to_int(tmp, &data->f[1]);
-	if (!i || *(tmp + i) != ',' || data->f[1] < 0 || data->f[1] > 255)
-		return (tmp - str); /// error
+	i = string_to_int(tmp, val[1]);
+	if (!i || *(tmp + i) != ',' || *val[1] < 0 || *val[1] > 255)
+		return (tmp - str);
 	tmp += i + 1;
-	i = string_to_int(tmp, &data->f[2]);
-	if (!i || data->f[2] < 0 || data->f[2] > 255)
-		return (tmp - str); /// error
+	i = string_to_int(tmp, val[2]);
+	if (!i || *val[2] < 0 || *val[2] > 255)
+		return (tmp - str);
 	tmp += i;
-	while (*tmp && isspace(*tmp) && *tmp != '\n')
+	while (*tmp && ft_isspace(*tmp) && *tmp != '\n')
 		tmp++;
 	if (*tmp != '\0' && *tmp != '\n')
-		return (tmp - str); /// error
-	return (-1); /// rgb should
+		return (tmp - str);
+	return (-1);
 }
 
-//function to get the path 
-int	get_path(char *path, char *str)
+int	get_path(char **path, char *str)
 {
 	int		it;
 	char	*tmp;
 
 	it = 0;
-	while (str[it] && !isspace(str[it]))
+	while (str[it] && ft_isspace(str[it]))
 		it++;
 	tmp = str + it;
-	while (str[it] && isspace(str[it]))
+	while (str[it] && !ft_isspace(str[it]))
+		it++;
+	tmp += it;
+	while (str[it] && ft_isspace(str[it]))
 		it++;
 	if (str[it])
 		return (0);
@@ -88,51 +88,35 @@ int	get_path(char *path, char *str)
 }
 
 //checker function to check and return the proper flag
-int	checker(t_data *data, char *line)															path["./path1","path2","path3","path4"]
-																										[0]		[1]		[2]    [3]
-																										
-																								f[10, 23, 0]
-																								c[2, 34, 234]
+int	checker(t_data *data, char *line)
 {
-	while (line && *line && isspace(*line))
+	int	len;
+	while (line && *line && ft_isspace(*line))
 		line++;
 	if (!(*line))
-		return (0);
-	if (!ft_strncmp(line, "NO ", 3) && get_path(data->path[0], line + 3))
+		return (0); // empty
+	if (!ft_strncmp(line, "NO ", 3) && get_path(&data->path[0], line + 3))
 		return (FLAG_1);
-	if (!ft_strncmp(line, "SO ", 3) && get_path(data->path[1], line + 3))
+	if (!ft_strncmp(line, "SO ", 3) && get_path(&data->path[1], line + 3))
 		return (FLAG_2);
-	if (!ft_strncmp(line, "WE ", 3) && get_path(data->path[2], line + 3))
+	if (!ft_strncmp(line, "WE ", 3) && get_path(&data->path[2], line + 3))
 		return (FLAG_3);
-	if (!ft_strncmp(line, "EA ", 3) && get_path(data->path[3], line + 3))
+	if (!ft_strncmp(line, "EA ", 3) && get_path(&data->path[3], line + 3))
 		return (FLAG_4);
-	if (!ft_strncmp(line, "F ", 2) && get_path(data->f, line + 2))
-		return (FLAG_5);
-	if (!ft_strncmp(line, "C ", 2) && get_path(data->c, line + 2))
-		return (FLAG_6);
-	return (FLAG_7);
+	if (!ft_strncmp(line, "F ", 2))
+	{
+		len = get_rgb(&data->f, line + 2);
+		if (len == ft_strlen(line + 2))
+			return (FLAG_5);
+	}
+	if (!ft_strncmp(line, "C ", 2))
+	{
+		len = get_rgb(&data->c, line + 2);
+		if (len == ft_strlen(line + 2))
+			return (FLAG_6);
+	}
+	return (FLAG_7); // error
 }
-
-// int	checker(t_data *data, char *line)
-// {
-// 	while (line && *line && isspace(*line))
-// 		line++;
-// 	if (!(*line))
-// 		return (0);
-// 	if (!ft_strncmp(line, "NO ", 3) && get_path(data->path[0], line + 3))
-// 		return (FLAG_1);
-// 	if (!ft_strncmp(line, "SO ", 3) && get_path(data->path[1], line + 3))
-// 		return (FLAG_2);
-// 	if (!ft_strncmp(line, "WE ", 3) && get_path(data->path[2], line + 3))
-// 		return (FLAG_3);
-// 	if (!ft_strncmp(line, "EA ", 3) && get_path(data->path[3], line + 3))
-// 		return (FLAG_4);
-// 	if (!ft_strncmp(line, "F ", 2) && get_path(data->f, line + 2))
-// 		return (FLAG_5);
-// 	if (!ft_strncmp(line, "C ", 2) && get_path(data->c, line + 2))
-// 		return (FLAG_6);
-// 	return (FLAG_7);
-// }
 
 //function to get the map by using a linked list
 //which saved each readed line in a node, then put it in the linked list
@@ -148,6 +132,7 @@ int	get_map(t_map_node **map, char *str)
 	*map = NULL;
 	while (*ptr != '\0')
 	{
+		// check
 		if (*ptr == '\n')
 		{
 			*ptr = '\0';
@@ -163,13 +148,10 @@ int	get_map(t_map_node **map, char *str)
 }
 
 // int main() {
-//     char input[] = "    32349822";
-//     int  result;
-// 	t_data data;
-//     int ret = get_rgb(&data, "1,2,3");
+//     char *input = strdup("3234982 ");
+// 	char *test;
+//     int ret = get_path(&test, input);
 // 	dprintf(2, "ret = %d\n", ret);
-// 	printf("r = %d\n", data.f[0]);
-// 	printf("g = %d\n", data.f[1]);
-// 	printf("b = %d\n", data.f[2]);
+// 	dprintf(2, "test = <%s>\n", test);
 //     return 0;
 // }
