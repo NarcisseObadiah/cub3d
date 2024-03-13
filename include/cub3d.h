@@ -6,7 +6,7 @@
 /*   By: mobadiah <mobadiah@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 23:26:53 by mobadiah          #+#    #+#             */
-/*   Updated: 2024/03/09 19:13:40 by mobadiah         ###   ########.fr       */
+/*   Updated: 2024/03/13 15:06:36 by mobadiah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@
 # include <ctype.h>
 # include <string.h>
 
+typedef struct map_node
+{
+	char			*map_line;
+	size_t			len;
+	struct map_node	*next;
+}	t_map_node;
+
 typedef struct s_data
 {
 	char		*path[4];
@@ -39,13 +46,6 @@ typedef struct s_data
 	int			c[3];
 	t_map_node	*map;
 }	t_data;
-
-typedef struct map_node
-{
-	char			*map_line;
-	size_t			len;
-	struct map_node	*next;
-}	t_map_node;
 
 //utils
 

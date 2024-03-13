@@ -6,7 +6,7 @@
 /*   By: mobadiah <mobadiah@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:21:07 by mobadiah          #+#    #+#             */
-/*   Updated: 2024/03/09 22:57:43 by mobadiah         ###   ########.fr       */
+/*   Updated: 2024/03/13 21:27:41 by mobadiah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	string_to_int(char *str, int *output)
 	*output = 0;
 	i = 0;
 	j = 0;
-	while (str[i] && ft_isspace(str[i])) /// create is space function
+	while (str[i] && isspace(str[i])) /// create is space function
 		i++;
 	if (str[i] == '+')
 	{
@@ -42,7 +42,7 @@ int	string_to_int(char *str, int *output)
 	return (i + j);
 }
 
-int get_rgb(int (*val)[3], char *str)
+int	get_rgb(int (*val)[3], char *str)
 {
 	int		i;
 	char	*tmp;
@@ -59,7 +59,7 @@ int get_rgb(int (*val)[3], char *str)
 	if (!i || *val[2] < 0 || *val[2] > 255)
 		return (tmp - str);
 	tmp += i;
-	while (*tmp && ft_isspace(*tmp) && *tmp != '\n')
+	while (*tmp && isspace(*tmp) && *tmp != '\n')
 		tmp++;
 	if (*tmp != '\0' && *tmp != '\n')
 		return (tmp - str);
@@ -72,13 +72,13 @@ int	get_path(char **path, char *str)
 	char	*tmp;
 
 	it = 0;
-	while (str[it] && ft_isspace(str[it]))
+	while (str[it] && isspace(str[it]))
 		it++;
 	tmp = str + it;
-	while (str[it] && !ft_isspace(str[it]))
+	while (str[it] && !isspace(str[it]))
 		it++;
 	tmp += it;
-	while (str[it] && ft_isspace(str[it]))
+	while (str[it] && isspace(str[it]))
 		it++;
 	if (str[it])
 		return (0);
@@ -91,7 +91,7 @@ int	get_path(char **path, char *str)
 int	checker(t_data *data, char *line)
 {
 	int	len;
-	while (line && *line && ft_isspace(*line))
+	while (line && *line && isspace(*line))
 		line++;
 	if (!(*line))
 		return (0); // empty
@@ -118,6 +118,42 @@ int	checker(t_data *data, char *line)
 	return (FLAG_7); // error
 }
 
+int	init(t_data*data, char	*str)
+{
+	int		flag;
+	int		ch_flag;
+	char	*tmp;
+
+	flag = 0;
+	ch_flag = 0;
+	tmp = str;
+	while (str && *str)
+	{
+		if (*str == '\n')
+		{
+			*(str++) = 0;
+			ch_flag = checker(data, tmp);
+			if ((ch_flag & FLAG_7) || (flag & ch_flag))
+				return (-1);
+			flag ^= ch_flag;
+			tmp = str;
+		}
+		if ((flag & FLAG_1) && (flag & FLAG_2) && (flag & FLAG_3)
+			&& (flag & FLAG_4) && (flag & FLAG_5) && (flag & FLAG_6))
+			break ;
+		str++;
+	}
+	if (!((flag & FLAG_1) && (flag & FLAG_2) && (flag & FLAG_3)
+			&& (flag & FLAG_4) && (flag & FLAG_5) && (flag & FLAG_6)))
+		return (-1);
+	if (get_map(data->map, tmp))
+		return (-1);
+	return (0);
+}
+
+
+// int	floodfield(t_data *data, )
+
 //function to get the map by using a linked list
 //which saved each readed line in a node, then put it in the linked list
 //before pointing to the next line
@@ -126,27 +162,51 @@ int	get_map(t_map_node **map, char *str)
 {
 	char	*line_start;
 	char	*ptr;
+	int		plyer_count;
 
 	line_start = 0;
 	ptr = str;
 	*map = NULL;
+	plyer_count = 0;
+
+	if (!str)
+		return (-1);
 	while (*ptr != '\0')
 	{
-		// check
+		if (!is_valid(*ptr))
+			return (-1);
+		if (*ptr == 'N' || *ptr == 'E' || *ptr == 'W' || *ptr == 'S')
+			plyer_count++;
 		if (*ptr == '\n')
 		{
 			*ptr = '\0';
 			add_node(map, &line_start);
 			line_start = ptr + 1;
 		}
-		else if (!is_valid(*ptr))
-			return (-1);
 		ptr++;
 	}
+	if (plyer_count != 1)
+		return (-1);
 	add_node(map, &line_start);
+	flood_fill
 	return (0);
 }
 
+int main()
+{
+    int rgb[3];
+    char *str = "100,50,200\n";
+    int result = get_rgb(&rgb, str);
+    if (result != -1)
+    {
+        printf("RGB values: %d, %d, %d\n", rgb[0], rgb[1], rgb[2]);
+    }
+    else
+    {
+        printf("Error parsing RGB values\n");
+    }
+    return 0;
+}
 // int main() {
 //     char *input = strdup("3234982 ");
 // 	char *test;
