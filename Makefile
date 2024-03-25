@@ -6,13 +6,13 @@
 #    By: mobadiah <mobadiah@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 23:37:45 by mobadiah          #+#    #+#              #
-#    Updated: 2024/03/09 03:48:17 by mobadiah         ###   ########.fr        #
+#    Updated: 2024/03/25 05:33:12 by mobadiah         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 NAME		:= cub3d
-SRC			:= SRC/parsing.c SRC/utils.c
+SRC			:= SRC/parsing.c SRC/parsing2.c SRC/utils.c
 # LIBMLX		:= ./MLX42
 LIBFT		:= ./libft
 OBJ			:= $(SRC:.c=.o)
